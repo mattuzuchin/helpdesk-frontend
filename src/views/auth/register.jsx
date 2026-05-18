@@ -8,20 +8,22 @@ import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
-import {login} from '../../app/api/auth.js';
+import {register} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
-export default function SignIn() {
+export default function Register() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const navigate = useNavigate();
-  const handleLogin = async () => {
+  const handleRegistration = async () => {
     try {
         setError("");
-        const response = await login(email, password);
+        const response = await register(name, email, password);
         const token = response.data.token;
         localStorage.setItem('token', token);
-        navigate('/dashboard');
+        console.log(email);
+        navigate('/login');
     } catch (err) {
       console.log(err);
 
@@ -33,6 +35,7 @@ export default function SignIn() {
       setError(message);
       }
   };
+    
   return (
     <Grid container
       justifyContent="center"
@@ -42,8 +45,14 @@ export default function SignIn() {
         <Paper sx={{ p: 6 }}>
           <Stack spacing={3}>
             <Typography variant="h6">
-              Login to your account
+              Register for an Account
             </Typography>
+             <TextField
+              label="Full Name"
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
             <TextField
               label="Email"
               fullWidth
@@ -65,21 +74,15 @@ export default function SignIn() {
             <Button
               variant="contained"
               fullWidth
-              onClick={handleLogin}
+              onClick={handleRegistration}
             >
               Login
             </Button>
             <MuiLink
               component={Link}
-              to={'/register'}
+              to={'/login'}
             >
-              Create an Account
-            </MuiLink>
-                        <MuiLink
-              component={Link}
-              to={'/forgotPW'}
-            >
-              Forgot Password
+             Already have an account?
             </MuiLink>
           </Stack>
         </Paper>
