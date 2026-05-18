@@ -9,17 +9,21 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import signInFunction from '../../app/api/auth.js';
+import { useNavigate } from 'react-router-dom';
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
         const response = await signInFunction(email, password);
         const token = response.data.token;
         localStorage.setItem('token', token);
         console.log('Login successful:', token); 
+        console.log("navigating to dashboard");
+        navigate('/dashboard');
     } catch (error) {
+    
       console.error('Login failed:', error);
     } };
     
@@ -58,7 +62,6 @@ export default function SignIn() {
             </Button>
             <MuiLink
               component={Link}
-              to="/auth/login"
             >
               Don't have an account?
             </MuiLink>

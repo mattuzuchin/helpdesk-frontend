@@ -1,6 +1,13 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./views/auth/login.jsx";
+import Dashboard from "./views/dashboard.jsx";
 
-function App() {
-  return <h1>Hello from App.jsx</h1>
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    </Routes>
+  );
 }
-
-export default App;
