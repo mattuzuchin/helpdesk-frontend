@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import { useState } from 'react';
 import {register} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +38,7 @@ export default function Register() {
   };
     
   return (
+    <Box sx={{ minHeight: "100vh", bgcolor: "white", alignItems: "center",justifyContent: "center", display: "flex"}}>
     <Grid container
       justifyContent="center"
       alignItems="center"
@@ -87,5 +89,6 @@ export default function Register() {
           </Stack>
         </Paper>
       </Grid>
+      </Box>
   );
 }

@@ -152,7 +152,6 @@
     }
   }
 }
-
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
@@ -160,7 +159,9 @@
     height: 48px;
   }
 }
-
+button:focus {
+    outline: none;
+}
 .ticks {
   position: relative;
   width: 100%;
@@ -182,3 +183,4 @@
     border-right-color: var(--border);
   }
 }
+
