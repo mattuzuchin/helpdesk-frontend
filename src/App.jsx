@@ -4,7 +4,9 @@ import {StaffDashboard, AdminDashboard, UserDashboard} from "./views/auth/dashbo
 import {CreateTicket} from "./views/createTicket.jsx";
 import {TicketView} from "./views/ticketView.jsx";
 import Register from "./views/auth/register.jsx";
-import ForgotPW from "./views/auth/login.jsx";
+import ForgotPW from "./views/auth/forgotPW.jsx";
+import ResetPassword from "./views/auth/resetPW.jsx";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 export default function App() {
   return (
@@ -13,11 +15,25 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/forgotPW" element={<ForgotPW />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<UserDashboard />} />
-      <Route path="/dashboard/admin" element={<AdminDashboard />} />
-      <Route path="/dashboard/staff" element={<StaffDashboard />} />
-      <Route path="/dashboard/createTicket" element={<CreateTicket />} />
-      <Route path="/dashboard/ticketView/:id" element={<TicketView />} />
+      <Route path="/resetPW" element={
+        <ProtectedRoute><ResetPassword /></ProtectedRoute>
+      } />
+      <Route path="/dashboard" element={
+        <ProtectedRoute><UserDashboard /></ProtectedRoute>
+      } />
+      <Route path="/dashboard/admin" element={
+        <ProtectedRoute><AdminDashboard /></ProtectedRoute>
+      } />
+      <Route path="/dashboard/staff" element={
+        <ProtectedRoute><StaffDashboard /></ProtectedRoute>
+      } />
+      <Route path="/dashboard/createTicket" element={
+        <ProtectedRoute><CreateTicket /></ProtectedRoute>
+      } />
+      <Route path="/dashboard/ticketView/:id" element={
+        <ProtectedRoute><TicketView /></ProtectedRoute>
+      } />
+      
     </Routes>
   );
 }

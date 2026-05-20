@@ -67,3 +67,30 @@ export async function getTicketInfo(id) {
     }
   );
 }
+
+export async function logOut() {
+  const token = localStorage.getItem("token");
+  return axios.post(
+    `${hostLink}auth/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }                   
+  );
+}
+
+export async function forgotPW(email) {
+  return axios.patch(
+    `${hostLink}auth/forgotPW`, {email}                 
+  );
+}
+
+export async function resetPW(token, newPassword) {
+  return axios.patch(`${hostLink}auth/resetPW`, { token, newPassword });
+}
+
+export async function verifyResetToken(token) {
+    return axios.post(`${hostLink}auth/verifyResetToken`, { token });
+}

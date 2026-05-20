@@ -9,22 +9,19 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import {register} from '../../app/api/auth.js';
+import {forgotPW} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
 export default function Register() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-  const handleRegistration = async () => {
+
+  const handleForgotPW = async () => {
     try {
         setError("");
-        const response = await register(name, email, password);
-        const token = response.data.token;
-        localStorage.setItem('token', token);
-        console.log(email);
-        navigate('/login');
+        const response = await forgotPW(email);
+        setSuccess(true);
     } catch (err) {
       console.log(err);
 
@@ -47,44 +44,31 @@ export default function Register() {
         <Paper sx={{ p: 6 }}>
           <Stack spacing={3}>
             <Typography variant="h6">
-              Register for an Account
+              Forgot Password? Enter Email Below:
             </Typography>
-             <TextField
-              label="Full Name"
-              fullWidth
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
             <TextField
               label="Email"
               fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <TextField
-              label="Password"
-              type="password"
-              fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)} 
-            />
-            {error && (
-              <Typography color="error">
-                {error}
-              </Typography>
+            {success ? (
+                <Typography color="success.main">
+                    If that email exists, a reset link has been sent to your inbox.
+                </Typography>
+            ) : (
+                <>
+                    {error && <Typography color="error">{error}</Typography>}
+                    <Button variant="contained" fullWidth onClick={handleForgotPW}>
+                        Reset
+                    </Button>
+                </>
             )}
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={handleRegistration}
-            >
-              Login
-            </Button>
             <MuiLink
               component={Link}
               to={'/login'}
             >
-             Already have an account?
+             Back to Login
             </MuiLink>
           </Stack>
         </Paper>

@@ -55,7 +55,7 @@ export default function SignIn() {
   };
   return (
     <div>
-    <Box sx={{ minHeight: "100vh", alignItems: "center",justifyContent: "center", display: "flex"}}>
+    <Box sx={{ minHeight: "100vh", alignItems: "center",justifyContent: "center", display: "flex", position: "center"}}>
     <Grid container
       justifyContent="center"
       alignItems="center"

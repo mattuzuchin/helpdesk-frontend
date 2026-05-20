@@ -23,11 +23,12 @@ export function TicketView() {
 
     useEffect(() => {
         const fetchTicket = async () => {
-            try {
+            try {            
                 setError("");
                 const res = await getTicketInfo(id);
                 setTI(res.data.ticket[0]);
             } catch (err) {
+
                 setError(
                     err.response?.data?.message || "Failed to load ticket"
                 );
@@ -86,9 +87,11 @@ export function TicketView() {
                             <Typography variant="h4">
                                 {ticketInfo.title}
                             </Typography>
+
                             <Typography color="text.secondary">
                                 Ticket ID: {ticketInfo.id}
                             </Typography>
+
                             <Typography>
                                 Problem: {ticketInfo.description}
                             </Typography>
@@ -109,6 +112,7 @@ export function TicketView() {
                                 spacing= {3}
                             />
                             </Typography>
+
                             <Typography>
                                 Opened By: {ticketInfo.createdBy?.name}
                             </Typography>
@@ -121,14 +125,17 @@ export function TicketView() {
                                 Open Date:{" "}
                                 {new Date(ticketInfo.openDate).toLocaleString()}
                             </Typography>
+
                             <Typography>
                                 Close Date:{" "}
                                 {(ticketInfo.closeDate)}
                             </Typography>
+
                             <Typography>
                                 Closed By:{" "}
                                 {(ticketInfo.closedBy?.name)}
                             </Typography>
+
                         </Stack>
                     </CardContent>
                     {/* <CardActions>
