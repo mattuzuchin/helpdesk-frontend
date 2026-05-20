@@ -1,24 +1,17 @@
 'use client';
 
-import Grid from '@mui/material/Grid';
 import Chip from '@mui/material/Chip';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
-import {createTicket} from '../app/api/auth.js';
 import { useParams } from "react-router-dom";
 import {getTicketInfo} from '../app/api/auth.js';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import * as React from 'react';
-import CardActions from '@mui/material/CardActions';
 
 export function TicketView() {
     const navigate = useNavigate();
