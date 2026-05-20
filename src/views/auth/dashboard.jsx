@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Icon from '@mui/material/Icon';
 import {jwtDecode} from "jwt-decode"
-import {getName, getUserTickets} from '../app/api/auth.js';
+import {getName, getUserTickets} from '../../app/api/auth.js';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from "react";
 import Card from '@mui/material/Card';
@@ -124,8 +124,9 @@ return (
           <Button
             variant="contained"
             onClick={() => navigate("/dashboard/createTicket")}
+            sx={{backgroundColor:'transparent'}}
             >
-              <PlusIcon></PlusIcon>
+              <PlusIcon sx ={{fontSize: 30}}></PlusIcon>
           </Button>
           <Button>
           <Avatar
@@ -141,30 +142,44 @@ return (
       </Stack>
     </div>
     {/* where we displasy tickets */}
-<Box
-  sx={{
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: 2,
-    width: "100%"
-  }}
->
+  <Box
+    sx={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+      gap: 2,
+      width: "100%"
+    }}
+  >
   {tickets?.map((ticket) => (
     <Card key={ticket.id} variant="outlined">
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6">
-          {ticket.title}
-        </Typography>
-
+        <Button
+            disableRipple
+            sx={{
+              backgroundColor: "transparent",
+              justifyContent: "flex-start",
+              padding: 0,
+              minWidth: 0,
+              textTransform: "none",
+              "&:hover": {
+                backgroundColor: "transparent",
+              },
+              
+            }}
+            onClick={() => navigate(`/dashboard/ticketView/${ticket.id}`)}
+        >
+          <Typography variant="h6" sx={{color: 'purple'}} >
+            {ticket.title}
+          </Typography>
+        </Button>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {ticket.description}
         </Typography>
       </Box>
 
       <Divider />
-
       <Box sx={{ p: 2 }}>
-        <Typography sx={{ color: "purple" }}>
+        <Typography sx={{ color: "teal" }}>
           Ticket Status
         </Typography>
 
@@ -183,6 +198,7 @@ return (
     </Card>
   ))}
 </Box>
+
   </div>
 );
 }

@@ -49,11 +49,19 @@ const handleCreateTicket = async () => {
 
 
   return (
-    <div>
-        
-      <Button 
-        sx={{backgroundColor: 'transparent', outlineColor: 'transparent', outline: 0}}
-        variant="contained"
+    <div>    
+      <Button
+        disableRipple
+        sx={{
+          backgroundColor: "transparent",
+          justifyContent: "flex-start",
+          padding: 0,
+          minWidth: 0,
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "transparent",
+          },
+        }}
         onClick={() => navigate("/dashboard")}
       >
       <img

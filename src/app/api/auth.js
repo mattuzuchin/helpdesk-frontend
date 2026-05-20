@@ -53,3 +53,17 @@ export async function createTicket(title, description) {
     }
   );
 }
+
+export async function getTicketInfo(id) {
+
+  const token = localStorage.getItem("token");
+
+  return axios.get(
+    `${hostLink}tickets/${id}/getTicket`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
