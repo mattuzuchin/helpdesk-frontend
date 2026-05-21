@@ -5,7 +5,6 @@ import { useDashboardData } from '../../hooks/useDashboardData.js';
 import { deleteTicket, closeTicket, claimTicket, reopenTicket } from '../../app/api/auth.js';
 import { jwtDecode } from "jwt-decode";
 // user db
-// Plain dashboard with no extra actions
 export function UserDashboard() {
   const { name, tickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
 
@@ -23,8 +22,7 @@ export function UserDashboard() {
   );
 }
 
-// staff b
-// Same as user but with extra header buttons for staff actions
+// staff db
 export function StaffDashboard() {
   const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
 const handleDeleteTicket = async (ticketId) => {
@@ -99,7 +97,6 @@ const handleDeleteTicket = async (ticketId) => {
 }
 
 // admin db
-// Same as staff but with additional admin-only actions
 export function AdminDashboard() {
   const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
   const handleDeleteTicket = async (ticketId) => {

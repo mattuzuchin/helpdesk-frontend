@@ -24,7 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { jwtDecode } from "jwt-decode";
 import BlockIcon from '@mui/icons-material/Block';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-// Reusable avatar dropdown menu
+//  dropdown menu
 export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) {
   return (
     <div style={{ position: "relative" }}>
@@ -70,7 +70,7 @@ export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) 
   );
 }
 
-// Reusable ticket card
+// icket card for display
 export function TicketCard({ ticket, navigate, currentUserRole, onDelete, onClose, onClaim, onReopen }) {
   return (
     <Card variant="outlined">
@@ -213,7 +213,7 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
         </Typography>
 
         <Stack direction="row" spacing={2} alignItems="center">
-          {/* Create ticket button — all roles get this */}
+
           <Button
             variant="contained"
             onClick={() => navigate("/dashboard/createTicket")}
@@ -222,7 +222,6 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
             <PlusIcon sx={{ fontSize: 30 }} />
           </Button>
 
-          {/* Staff/admin-specific buttons slot in here */}
           {extraHeaderActions}
 
           <AvatarMenu

@@ -20,7 +20,7 @@ export function ReassignTickets() {
   const [staffUsers, setStaffUsers] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [pendingAssign, setPendingAssign] = useState({}); // ticketId -> selectedUserId
+  const [pendingAssign, setPendingAssign] = useState({}); 
   const navigate = useNavigate();
   const decoded = jwtDecode(localStorage.getItem("token"));
 
@@ -156,7 +156,7 @@ export function ReassignTickets() {
                   >
                     <MenuItem value="" disabled>Select staff…</MenuItem>
                     {staffUsers
-                      .filter(u => u.id !== ticket.assignedToId) // don't show current assignee
+                      .filter(u => u.id !== ticket.assignedToId) 
                       .map(u => (
                         <MenuItem key={u.id} value={u.id}>{u.name}</MenuItem>
                       ))}

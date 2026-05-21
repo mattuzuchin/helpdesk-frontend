@@ -83,7 +83,6 @@ export function ManageUsers() {
         {users.map((user) => (
           <Card key={user.id} variant="outlined" sx={{ p: 2, position: "relative" }}>
                 
-                {/* delete — can't delete other admins or yourself */}
                 {user.role !== "admin" && user.id !== currentUserId && (
                 <IconButton
                 size="small"
@@ -104,12 +103,10 @@ export function ManageUsers() {
                   size="small"
                 />
 
-                {/*avatar with first letter of name, colored by role and on right side of card*/}
                 <Avatar sx={{ bgcolor: stringToColor(user.name), ml: "auto" }}>
                   {user.name.charAt(0)}
                 </Avatar>
               </Box>
-              {/* only show role changer if the user is not an admin */}
               {user.role !== "admin" && user.id !== currentUserId && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Typography variant="body2">Change role:</Typography>
