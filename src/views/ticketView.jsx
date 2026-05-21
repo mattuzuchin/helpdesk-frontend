@@ -1,5 +1,5 @@
 'use client';
-
+import { jwtDecode } from "jwt-decode";
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -9,7 +9,6 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
-import { styled } from '@mui/material/styles';
 import { useParams } from "react-router-dom";
 import {getTicketInfo, addCommentAPI, deleteCommentFromTicket} from '../app/api/auth.js';
 import Card from '@mui/material/Card';
@@ -23,33 +22,13 @@ import ListItemText from '@mui/material/ListItemText';
 import {logOut} from '../app/api/auth.js';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Key from '@mui/icons-material/Key';
-import Badge from '@mui/material/Badge';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import ReportIcon from '@mui/icons-material/Report';
 import * as Colors from '@mui/material/colors'
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: 'ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
-      content: '""',
-    },
-  },
-  '@keyframes ripple': {
-    '0%': { transform: 'scale(.8)', opacity: 1 },
-    '100%': { transform: 'scale(2.4)', opacity: 0 },
-  },
-}));
+import {StyledBadge} from '../utils/styles.jsx';
+
 export function TicketView() {
     const navigate = useNavigate();
     const [ticketInfo, setTI] = useState(null);
@@ -61,7 +40,9 @@ export function TicketView() {
     const { id } = useParams();
     const [loggingOut, setLO] = useState('');
     const [loggingOutError, setLOR] = useState('');
-
+    const decoded = jwtDecode(localStorage.getItem("token"));
+    const currentUserId = decoded.id;
+    const currentUserRole = decoded.role;
     useEffect(() => {
         const fetchTicket = async () => {
             try {
@@ -175,7 +156,7 @@ export function TicketView() {
                                 </Alert>
                             )}
                             {loggingOutError && (
-                            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                            <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">
                                 {loggingOutError}
                             </Alert>
                             )}  
@@ -245,13 +226,15 @@ export function TicketView() {
                                             <Box key={comment.id} sx={{ borderBottom: "1px solid #eee", pb: 2, position: "relative" }}>
 
                                                 {/* delete icon should appear on EVERY comment */}
-                                                <IconButton
-                                                    size="small"
-                                                    sx={{ position: "absolute", top: 8, right: 8 }}
-                                                    onClick={() => {deleteComment(comment.id)}}
-                                                >
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
+                                                    {(currentUserRole === "admin" || comment.user.id === currentUserId) && (
+                                                    <IconButton
+                                                        size="small"
+                                                        sx={{ position: "absolute", top: 8, right: 8 }}
+                                                        onClick={() => deleteComment(comment.id)}
+                                                    >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                    )}
                                                 <Typography variant="subtitle2">
                                                     {comment.user.name} commented on{" "}
                                                     {new Date(comment.createdAt).toLocaleString()}
@@ -312,13 +295,13 @@ export function TicketView() {
                 </Box>
 
             </Box>
-                        {success && (
+            {success && (
                 <Alert icon={<CheckIcon fontSize="inherit" />} severity="success" onClose={handleCloseSuccess}>
                     {success}
                 </Alert>
             )}
             {error && (
-                <Alert icon={<CheckIcon fontSize="inherit" />} severity="error" onClose={handleCloseError}>
+                <Alert icon={<ReportIcon fontSize="inherit" />} severity="error" onClose={handleCloseError}>
                     {error}
                 </Alert>
             )}

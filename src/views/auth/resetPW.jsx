@@ -11,7 +11,8 @@ import Box from '@mui/material/Box';
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { resetPW, verifyResetToken } from '../../app/api/auth.js';
-
+import ReportIcon from '@mui/icons-material/Report';
+import Alert from '@mui/material/Alert';
 export default function ResetPassword() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
@@ -107,7 +108,9 @@ export default function ResetPassword() {
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                                 {error && (
-                                    <Typography color="error">{error}</Typography>
+                                <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">
+                                    {error}
+                                </Alert>
                                 )}
                                 <Button variant="contained" fullWidth onClick={handleResetPW}>
                                     Reset Password

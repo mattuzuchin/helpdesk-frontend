@@ -1,358 +1,190 @@
 'use client';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import * as Colors from '@mui/material/colors'
-import { styled } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
-import Icon from '@mui/material/Icon';
-import {jwtDecode} from "jwt-decode"
-import {getName, getUserTickets} from '../../app/api/auth.js';
-import Typography from '@mui/material/Typography';
-import { useEffect, useState } from "react";
-import Card from '@mui/material/Card';
-import Divider from '@mui/material/Divider';
-import Chip from '@mui/material/Chip';
-import Box from '@mui/material/Box';
-import { createSvgIcon } from '@mui/material/utils';
-import {logOut} from '../../app/api/auth.js';
-import { useNavigate } from "react-router-dom";
-import Paper from '@mui/material/Paper';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Key from '@mui/icons-material/Key';
+import { BaseDashboard} from './baseDashboard.jsx';
+import { useDashboardData } from '../../hooks/useDashboardData.js';
+import { deleteTicket, closeTicket, claimTicket, reopenTicket } from '../../app/api/auth.js';
+import { jwtDecode } from "jwt-decode";
+// user db
+// Plain dashboard with no extra actions
+export function UserDashboard() {
+  const { name, tickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: 'ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
-      content: '""',
-    },
-  },
-  '@keyframes ripple': {
-    '0%': { transform: 'scale(.8)', opacity: 1 },
-    '100%': { transform: 'scale(2.4)', opacity: 0 },
-  },
-}));
-const PlusIcon = createSvgIcon(
-  // credit: plus icon from https://heroicons.com
-  <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" color='lightblue'>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-  </svg>,
-  'Plus',
-);
+  return (
+    <BaseDashboard
+      name={name}
+      tickets={tickets}
+      menuOpen={menuOpen}
+      setMenuOpen={setMenuOpen}
+      success={success}
+      error={error}
+      onLogout={logOutUser}
+      navigate={navigate}
+    />
+  );
+}
 
-
-//dashboard will look dif per user role
-export function UserDashboard( ) {
-  const [name, setName] = useState("");
-  const [tickets, setTickets] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const token = localStorage.getItem("token");
-        const decoded = jwtDecode(token);
-        const getUsername= await getName(decoded.id);
-
-        setName(getUsername.data.name);
-
-        const getTickets = await getUserTickets(decoded.id);
-        setTickets(getTickets.data.tickets);
-  
-
-      } catch (err) {
-        console.log(err);  
-      }
-    };
-    fetchData();
-  }, []);
-  const [error, setError] = useState("");
-
-  const logOutUser = async () => {
+// staff b
+// Same as user but with extra header buttons for staff actions
+export function StaffDashboard() {
+  const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
+const handleDeleteTicket = async (ticketId) => {
     try {
-      setError(''); 
-      const res = await logOut();
-      setSuccess("Logged out!");
-      localStorage.removeItem("token");
-      setTimeout(() => {
-        navigate("/login");
-    }, 2500)
+      await deleteTicket(ticketId);
+      setTickets(prev => prev.filter(t => t.id !== ticketId));
     } catch (err) {
-      setError(
-          err.response?.data?.message || "Failed to load error"
-        );
-      }
-    };
-  
-return (
-  <div
-    style={{
-      position: "relative",
-      padding: "20px",
-      display: "flex",
-      flexDirection: "column",
-      gap: "20px"
-    }}
-  >
-
-      {/* header for dash */}
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        position: "relative"
-      }}
-    >
-
-      <img
-        src="/uw.png"
-        alt="logo"
-        style={{
-          width: 120,
-          height: 80,
-          objectFit: "contain"
-        }}
-      />
-
-      <Typography
-        variant="h5"
-        sx={{
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)"
-        }}
-      >
-        {name}'s Dashboard
-      </Typography>
-
-    <Stack direction="row" spacing={2} alignItems="center">
-    
+      console.log(err);
+    }
+  };
+  const handleReopenTicket = async (ticketId) => {
+    try {
+      await reopenTicket(ticketId);
+      setTickets(prev => prev.map(t =>
+        t.id === ticketId ? { ...t, status: "open", closeDate: null } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleCloseTicket = async (ticketId) => {
+    try {
+      await closeTicket(ticketId);
+      setTickets(prev => prev.map(t => 
+        t.id === ticketId ? { ...t, status: "closed" } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };  
+  const handleClaimTicket = async (ticketId) => {
+    try {
+      await claimTicket(ticketId);
+      const decoded = jwtDecode(localStorage.getItem("token"));
+      setTickets(prev => prev.map(t =>
+        t.id === ticketId ? { ...t, status: "claimed", assignedTo: { id: decoded.id } } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const staffActions = (
+    <>
       <Button
         variant="contained"
-        onClick={() => navigate("/dashboard/createTicket")}
-        sx={{ backgroundColor: 'transparent' }}
+        onClick={() => navigate("/dashboard/allTickets")}
+        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
       >
-        <PlusIcon sx={{ fontSize: 30 }} />
+        All Tickets
       </Button>
-
-      <div style={{ position: "relative" }}>
-        <Button
-          variant="contained"
-          onClick={() => setMenuOpen(prev => !prev)}
-          sx={{ backgroundColor: 'transparent' }}
-        >
-        <StyledBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          variant="dot"
-        >
-          <Avatar
-            sx={{ bgcolor: Colors.deepOrange[500], width: 45, height: 45 }}
-            src="/images2.jpg"
-          />
-        </StyledBadge>
-        </Button>
-        
-
-        {menuOpen && (
-          <Paper sx={{
-            width: 200,
-            position: "absolute",
-            top: "100%",
-            right: 0,
-            zIndex: 1000
-          }}>
-            <MenuList>
-              <Divider />
-              
-              <MenuItem onClick={
-                logOutUser
-              }>
-                
-                <ListItemIcon><Key fontSize="small" /></ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </MenuItem>
-            </MenuList>
-            {success && (
-              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-                  {success}
-              </Alert>
-            )}
-            {error && (
-              <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-                  {error}
-              </Alert>
-            )}            
-          </Paper>
-        )}
-      </div>
-
-      </Stack>
-          </div>
-          {/* where we displasy tickets */}
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: 2,
-                width: "100%"
-              }}
-            >
-            {tickets?.map((ticket) => (
-              <Card key={ticket.id} variant="outlined">
-                <Box sx={{ p: 2 }}>
-                  <Button
-                      disableRipple
-                      sx={{
-                        backgroundColor: "transparent",
-                        justifyContent: "flex-start",
-                        padding: 0,
-                        minWidth: 0,
-                        textTransform: "none",
-                        "&:hover": {
-                          backgroundColor: "transparent",
-                        },
-                        
-                      }}
-                      onClick={() => navigate(`/dashboard/ticketView/${ticket.id}`)}
-                  >
-                    <Typography variant="h6" sx={{color: 'purple'}} >
-                      {ticket.title}
-                    </Typography>
-
-                  </Button>
-
-                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                    {ticket.description}
-                  </Typography>
-
-                </Box>
-
-                <Divider />
-                <Box sx={{ p: 2 }}>
-
-                  <Typography sx={{ color: "teal" }}>
-                    Ticket Status
-                  </Typography>
-
-                  <Chip
-                    label={ticket.status.toUpperCase()}
-                    color={
-                      ticket.status === "open"
-                        ? "success"
-                        : ticket.status === "closed"
-                        ? "error"
-                        : "warning"
-                    }
-                    size="small"
-                  />
-                </Box>
-              </Card>
-            ))}
-            
-          </Box>
-          
-        </div>
-        
+    </>
   );
-}
-export function StaffDashboard() {
+
   return (
-    <div>
-      <Icon src="../../public/panda.jpg">
-
-      </Icon>
-      <Button disableC>
-        <Stack direction="row" spacing={3}>
-      </Stack>
-        Dashboard
-      </Button>
-      <Snackbar/>
-      <Stack direction="row" spacing={2} sx={{position: 'absolute', top: 10, right: 10}}>
-        
-        <StyledBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          variant="dot"
-          >
-          <Avatar sx = {{bgcolor: Colors.deepOrange[500], width: 45, height: 45}} alt="User" src="../../public/images2.jpg" />
-        </StyledBadge>
-    </Stack>
-    </div>
-    
+    <BaseDashboard
+      name={name}
+      tickets={tickets}
+      menuOpen={menuOpen}
+      setMenuOpen={setMenuOpen}
+      success={success}
+      error={error}
+      onLogout={logOutUser}
+      navigate={navigate}
+      title={`${name}'s Staff Dashboard`}
+      extraHeaderActions={staffActions}
+      onDeleteTicket={handleDeleteTicket}
+      onCloseTicket={handleCloseTicket}
+      onClaimTicket={handleClaimTicket}
+      onReopenTicket={handleReopenTicket}
+    />
   );
 }
 
+// admin db
+// Same as staff but with additional admin-only actions
 export function AdminDashboard() {
-  const token = localStorage.getItem("token");
-  const decoded = jwtDecode(token);
-  const name = decoded.id.name;
-  return (
-    <div
-      style={{
-        position: "relative",
-        padding: "20px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between"
-      }}
-    >
-      <img
-        src="/uw.png"
-        alt="logo"
-        style={{
-          width: 120,
-          height: 80,
-          objectFit: "contain"
-        }}
-      />
-      <Typography
-        variant="h5"
-        sx={{
-          position: "absolute",
-          left: "50%",
-          transform: "translateX(-50%)"
-        }}
-      >
-        {name}'s Administrator Dashboard
-      </Typography>
-      <Stack direction="row" spacing={2}>
-        <StyledBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          variant="dot"
-        >
-          <Avatar
-            sx={{
-              bgcolor: Colors.deepOrange[500],
-              width: 45,
-              height: 45
-            }}
-            src="/images2.jpg"
-          />
-        </StyledBadge>
-      </Stack>
+  const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
+  const handleDeleteTicket = async (ticketId) => {
+    try {
+      await deleteTicket(ticketId);
+      setTickets(prev => prev.filter(t => t.id !== ticketId));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    </div>
+  const handleCloseTicket = async (ticketId) => {
+    try {
+      await closeTicket(ticketId);
+      setTickets(prev => prev.map(t => 
+        t.id === ticketId ? { ...t, status: "closed" } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };  
+  const handleClaimTicket = async (ticketId) => {
+    try {
+      await claimTicket(ticketId);
+      const decoded = jwtDecode(localStorage.getItem("token"));
+      setTickets(prev => prev.map(t =>
+        t.id === ticketId ? { ...t, status: "claimed", assignedTo: { id: decoded.id } } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const handleReopenTicket = async (ticketId) => {
+    console.log("reopen clicked", ticketId); // add this
+    try {
+      await reopenTicket(ticketId);
+      setTickets(prev => prev.map(t =>
+        t.id === ticketId ? { ...t, status: "open", closeDate: null } : t
+      ));
+    } catch (err) {
+      console.log(err);
+    }
+  };  
+  const adminActions = (
+    <>
+      <Button
+        variant="contained"
+        onClick={() => navigate("/dashboard/allTickets")}
+        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+      >
+        All Tickets
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => navigate("/dashboard/manageUsers")}
+        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+      >
+        Manage Users
+      </Button>
+      <Button
+        variant="contained"
+        onClick={() => navigate("/dashboard/reassignTickets")}
+        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+      >
+        Reassign Tickets
+      </Button>
+    </>
+  );
+
+  return (
+    <BaseDashboard
+      name={name}
+      tickets={tickets}
+      menuOpen={menuOpen}
+      setMenuOpen={setMenuOpen}
+      success={success}
+      error={error}
+      onLogout={logOutUser}
+      navigate={navigate}
+      title={`${name}'s Admin Dashboard`}
+      extraHeaderActions={adminActions}
+      onDeleteTicket={handleDeleteTicket}
+      onCloseTicket={handleCloseTicket}
+      onClaimTicket={handleClaimTicket}
+      onReopenTicket={handleReopenTicket}      
+    />
   );
 }

@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import {createTicket} from '../app/api/auth.js';
+import ReportIcon from '@mui/icons-material/Report';
 let create = false
 function disableFields() {
     create = !create;
@@ -91,7 +92,7 @@ const handleCreateTicket = async () => {
             </Alert>
             )}
             {error && (
-            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+            <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">
                 {error}
             </Alert>
             )}            

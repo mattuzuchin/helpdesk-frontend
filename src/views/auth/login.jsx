@@ -13,7 +13,7 @@ import {login} from '../../app/api/auth.js';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from "jwt-decode"
+import ReportIcon from '@mui/icons-material/Report';
 export default function SignIn() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
@@ -27,28 +27,14 @@ export default function SignIn() {
         const response = await login(email.trimEnd(), password);
         const token = response.data.token;
         localStorage.setItem('token', token);
-        let isAdmin = false;
-        let isStaff = false;
-        let isUser = false;
+        console.log("Login successful, token stored:", token);
         if(!token) {
           return null;
         }
         setSuccess("Login Success! Taking you to your dashboard now.");
-        if(token) {
-          const decoded = jwtDecode(token);
-          isAdmin = decoded.role === "admin";
-          isStaff = decoded.role === "staff";
-          isUser = decoded.role === "user";
-        }
         setTimeout(() => {
-          if(isAdmin) {
-            navigate('/dashboard/admin')
-          } else if (isStaff) {
-            navigate('/dashboard/staff')
-          } else if (isUser) {
-            navigate('/dashboard');
-          }
-        }, 4000)
+          navigate('/dashboard');
+        }, 2500);
     } catch (err) {
       console.log(err);
 
@@ -93,7 +79,7 @@ export default function SignIn() {
             </Alert>
             )}
             {error && (
-            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+            <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">
                 {error}
             </Alert>
             )}

@@ -13,6 +13,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useState } from 'react';
 import {register} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
+import ReportIcon from '@mui/icons-material/Report';
 export default function Register() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
@@ -79,7 +80,7 @@ export default function Register() {
               </Alert>
             )}
             {error && (
-              <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+              <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">
                   {error}
               </Alert>
             )}                

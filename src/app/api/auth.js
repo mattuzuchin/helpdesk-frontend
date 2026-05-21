@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 const hostLink = import.meta.env.VITE_HOSTCODE;
 export function login (email, password) {
   return axios.post(`${hostLink}auth/login`, { email, password });
@@ -115,6 +116,108 @@ export async function deleteCommentFromTicket(commentId) {
       headers: {
         Authorization: `Bearer ${token}`
       }
+    }
+  );
+}
+
+export async function getAllTickets() {
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${hostLink}tickets`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
+export async function deleteTicket(ticketId) {
+  const token = localStorage.getItem("token");
+  return axios.delete(
+    `${hostLink}tickets/delete/${ticketId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
+export async function closeTicket(ticketId) {
+  const token = localStorage.getItem("token");
+  return axios.patch(
+    `${hostLink}tickets/${ticketId}/close`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+export async function getAllUsers() {
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${hostLink}users/getAllUsers`,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+export async function changeUserRole(userId, newRole) {
+  const token = localStorage.getItem("token");
+  return axios.patch(
+    `${hostLink}users/${userId}/changerole`,
+    { newRole },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+export async function deleteUser(userId) {
+  const token = localStorage.getItem("token");
+  return axios.delete(
+    `${hostLink}users/delete/${userId}`,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+export async function claimTicket(ticketId) {
+  const token = localStorage.getItem("token");
+  const decoded = jwtDecode(token);
+  return axios.patch(
+    `${hostLink}tickets/${ticketId}/assign`,
+    { agentID: decoded.id },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+
+export async function reassignTicket(ticketId, agentID) {
+  const token = localStorage.getItem("token");
+  return axios.patch(
+    `${hostLink}tickets/${ticketId}/reassign`,
+    { agentID: agentID },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+}
+
+
+export async function reopenTicket(ticketId) {
+  const token = localStorage.getItem("token");
+  return axios.patch(
+    `${hostLink}tickets/${ticketId}/reopen`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` }
     }
   );
 }
