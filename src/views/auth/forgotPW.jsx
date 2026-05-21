@@ -11,6 +11,8 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import {forgotPW} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 export default function Register() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
@@ -20,8 +22,8 @@ export default function Register() {
   const handleForgotPW = async () => {
     try {
         setError("");
-        const response = await forgotPW(email);
-        setSuccess(true);
+        await forgotPW(email);
+        setSuccess("If that email exists, a reset link has been sent to your inbox.");
     } catch (err) {
       console.log(err);
 
@@ -53,12 +55,16 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {success ? (
-                <Typography color="success.main">
-                    If that email exists, a reset link has been sent to your inbox.
-                </Typography>
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                {success}
+            </Alert>
             ) : (
                 <>
-                    {error && <Typography color="error">{error}</Typography>}
+                    {error && (
+                      <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                        {error}
+                      </Alert>
+                    )}
                     <Button variant="contained" fullWidth onClick={handleForgotPW}>
                         Reset
                     </Button>

@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import { useState } from 'react';
 import {register} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +18,7 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const handleRegistration = async () => {
     try {
@@ -23,8 +26,10 @@ export default function Register() {
         const response = await register(name, email, password);
         const token = response.data.token;
         localStorage.setItem('token', token);
-        console.log(email);
-        navigate('/login');
+        setSuccess("User registration successful! Taking you back to login...");
+        setTimeout(() => {
+            navigate('/login');
+        }, 4000)
     } catch (err) {
       console.log(err);
 
@@ -48,7 +53,7 @@ export default function Register() {
           <Stack spacing={3}>
             <Typography variant="h6">
               Register for an Account
-            </Typography>
+            </Typography>         
              <TextField
               label="Full Name"
               fullWidth
@@ -68,11 +73,16 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
             />
-            {error && (
-              <Typography color="error">
-                {error}
-              </Typography>
+            {success && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                  {success}
+              </Alert>
             )}
+            {error && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                  {error}
+              </Alert>
+            )}                
             <Button
               variant="contained"
               fullWidth

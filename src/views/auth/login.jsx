@@ -10,12 +10,16 @@ import MuiLink from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import {login} from '../../app/api/auth.js';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode"
 export default function SignIn() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState("");
+
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
@@ -29,19 +33,22 @@ export default function SignIn() {
         if(!token) {
           return null;
         }
+        setSuccess("Login Success! Taking you to your dashboard now.");
         if(token) {
           const decoded = jwtDecode(token);
           isAdmin = decoded.role === "admin";
           isStaff = decoded.role === "staff";
           isUser = decoded.role === "user";
         }
-        if(isAdmin) {
-          navigate('/dashboard/admin')
-        } else if (isStaff) {
-          navigate('/dashboard/staff')
-        } else if (isUser) {
-          navigate('/dashboard');
-        }
+        setTimeout(() => {
+          if(isAdmin) {
+            navigate('/dashboard/admin')
+          } else if (isStaff) {
+            navigate('/dashboard/staff')
+          } else if (isUser) {
+            navigate('/dashboard');
+          }
+        }, 4000)
     } catch (err) {
       console.log(err);
 
@@ -80,10 +87,15 @@ export default function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
             />
+            {success && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                {success}
+            </Alert>
+            )}
             {error && (
-              <Typography color="error">
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
                 {error}
-              </Typography>
+            </Alert>
             )}
             <Button
               variant="contained"

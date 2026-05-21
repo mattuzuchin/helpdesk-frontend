@@ -94,3 +94,27 @@ export async function resetPW(token, newPassword) {
 export async function verifyResetToken(token) {
     return axios.post(`${hostLink}auth/verifyResetToken`, { token });
 }
+export async function addCommentAPI(ticketId, content, imageUrl) {
+  const token = localStorage.getItem("token");
+  return axios.post(
+    `${hostLink}tickets/${ticketId}/comments`,
+    { content, imageUrl },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
+export async function deleteCommentFromTicket(commentId) {
+  const token = localStorage.getItem("token");
+  return axios.delete(
+    `${hostLink}tickets/deletecomment/${commentId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}

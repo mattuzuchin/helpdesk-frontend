@@ -22,8 +22,10 @@ import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Cloud from '@mui/icons-material/Cloud';
+import Key from '@mui/icons-material/Key';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -54,11 +56,14 @@ const PlusIcon = createSvgIcon(
   </svg>,
   'Plus',
 );
+
+
 //dashboard will look dif per user role
 export function UserDashboard( ) {
   const [name, setName] = useState("");
   const [tickets, setTickets] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -86,8 +91,11 @@ export function UserDashboard( ) {
     try {
       setError(''); 
       const res = await logOut();
+      setSuccess("Logged out!");
       localStorage.removeItem("token");
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+    }, 2500)
     } catch (err) {
       setError(
           err.response?.data?.message || "Failed to load error"
@@ -164,6 +172,7 @@ return (
           />
         </StyledBadge>
         </Button>
+        
 
         {menuOpen && (
           <Paper sx={{
@@ -175,13 +184,25 @@ return (
           }}>
             <MenuList>
               <Divider />
+              
               <MenuItem onClick={
                 logOutUser
               }>
-                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
+                
+                <ListItemIcon><Key fontSize="small" /></ListItemIcon>
                 <ListItemText>Logout</ListItemText>
               </MenuItem>
             </MenuList>
+            {success && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                  {success}
+              </Alert>
+            )}
+            {error && (
+              <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                  {error}
+              </Alert>
+            )}            
           </Paper>
         )}
       </div>
@@ -247,10 +268,12 @@ return (
                   />
                 </Box>
               </Card>
-
             ))}
+            
           </Box>
+          
         </div>
+        
   );
 }
 export function StaffDashboard() {

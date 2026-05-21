@@ -22,7 +22,9 @@ export default function ResetPassword() {
     const token = searchParams.get("token");
     const [tokenValid, setTokenValid] = useState(null);
     useEffect(() => {
-
+        if (!token) {
+            return navigate("/login");
+        }
         const verifyToken = async () => {
             try {
                 console.log("verifying token:", token);

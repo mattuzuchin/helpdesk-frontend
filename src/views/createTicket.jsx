@@ -90,6 +90,11 @@ const handleCreateTicket = async () => {
                 {success}
             </Alert>
             )}
+            {error && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+                {error}
+            </Alert>
+            )}            
             {!create && (
             <TextField
               label="Subject"
@@ -105,11 +110,6 @@ const handleCreateTicket = async () => {
               value={ticketDescription}
               onChange={(e) => setDesc(e.target.value)} 
             />
-            )}
-            {error && (
-              <Typography color="error">
-                {error}
-              </Typography>
             )}
             {!create && (
             <Button
