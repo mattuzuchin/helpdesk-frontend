@@ -7,7 +7,7 @@ import {TicketView} from "./views/ticketView.jsx";
 import Register from "./views/auth/register.jsx";
 import ForgotPW from "./views/auth/forgotPW.jsx";
 import ResetPassword from "./views/auth/resetPW.jsx";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/protectedRoute.jsx";
 import { AllTickets } from "./views/allTickets.jsx";
 import { ManageUsers } from "./views/manageUsers.jsx";
 import {ReassignTickets} from "./views/reassignTickets.jsx";
