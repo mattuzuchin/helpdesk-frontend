@@ -38,6 +38,7 @@ export default function SignIn() {
         setSuccess("Login Success! Taking you to your dashboard now.");
         disableLoginField();
         setTimeout(() => {
+          disableLoginField();
           navigate('/dashboard');
         }, 2500);
     } catch (err) {

@@ -34,6 +34,7 @@ export default function Register() {
         setSuccess("User registration successful! Taking you back to login...");
         disableRegisterField();
         setTimeout(() => {
+            disableRegisterField();
             navigate('/login');
         }, 4000)
     } catch (err) {
