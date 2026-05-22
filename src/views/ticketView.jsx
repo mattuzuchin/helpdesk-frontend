@@ -107,7 +107,7 @@ export function TicketView() {
         setError(null);
     };
     return (
-        <Box sx={{ display: "flex", flexDirection: "column", p: 3, gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", p: 3, gap: 2, minHeight: "100vh", backgroundColor: "#16171d" }}>
             <div style={{
             display: "flex",
             alignItems: "center",
