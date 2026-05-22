@@ -196,7 +196,7 @@ export function TicketView() {
                                     <Typography>Opened By: {ticketInfo.createdBy?.name}</Typography>
                                     <Typography>Assigned To: {ticketInfo.assignedTo?.name || "Yet to be claimed by a staff member."}</Typography>
                                     <Typography>Open Date: {new Date(ticketInfo.openDate).toLocaleString()}</Typography>
-                                    <Typography>Close Date: {new Date(ticketInfo.closeDate).toLocaleString() || "—"}</Typography>
+                                    <Typography>Close Date: {ticketInfo.closeDate ? new Date(ticketInfo.closeDate).toLocaleString() : "—"}</Typography>
                                     <Typography>Closed By: {ticketInfo.closedBy?.name || "—"}</Typography>
                                 </Stack>
                             </CardContent>
