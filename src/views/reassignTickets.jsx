@@ -76,7 +76,7 @@ export function ReassignTickets() {
   };
 
   return (
-    <Box sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: "20px" }}>
+    <Box sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: "20px", minHeight: "100vh", backgroundColor: "#16171d" }}>
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>

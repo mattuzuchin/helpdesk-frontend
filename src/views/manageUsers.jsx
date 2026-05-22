@@ -65,7 +65,7 @@ export function ManageUsers() {
     };
   return (
     
-    <Box sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: "20px" }}>
+    <Box sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: "20px", minHeight: "100vh", backgroundColor: "#16171d" }}>
       {/* header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
         <Button variant="contained" onClick={() => navigate("/dashboard")} sx={{ backgroundColor: 'transparent' }}>
