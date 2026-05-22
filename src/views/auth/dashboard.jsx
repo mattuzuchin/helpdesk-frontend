@@ -33,16 +33,26 @@ const handleDeleteTicket = async (ticketId) => {
       console.log(err);
     }
   };
-  const handleReopenTicket = async (ticketId) => {
-    try {
-      await reopenTicket(ticketId);
-      setTickets(prev => prev.map(t =>
-        t.id === ticketId ? { ...t, status: "open", closeDate: null } : t
-      ));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+const handleReopenTicket = async (ticketId) => {
+  try {
+    await reopenTicket(ticketId);
+
+    setTickets(prev =>
+      prev.map(t =>
+        t.id === ticketId
+          ? {
+              ...t,
+              status: "open",
+              closeDate: null,
+              assignedTo: null
+            }
+          : t
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicket(ticketId);
@@ -130,16 +140,25 @@ export function AdminDashboard() {
     }
   };
   const handleReopenTicket = async (ticketId) => {
-    console.log("reopen clicked", ticketId); // add this
     try {
       await reopenTicket(ticketId);
-      setTickets(prev => prev.map(t =>
-        t.id === ticketId ? { ...t, status: "open", closeDate: null } : t
-      ));
+
+      setTickets(prev =>
+        prev.map(t =>
+          t.id === ticketId
+            ? {
+                ...t,
+                status: "open",
+                closeDate: null,
+                assignedTo: null
+              }
+            : t
+        )
+      );
     } catch (err) {
       console.log(err);
     }
-  };  
+  };
   const adminActions = (
     <>
       <Button

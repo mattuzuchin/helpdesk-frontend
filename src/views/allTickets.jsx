@@ -39,16 +39,26 @@ export function AllTickets() {
     }
     };
 
-  const handleReopenTicket = async (ticketId) => {
-    try {
-      await reopenTicket(ticketId);
-      setTickets(prev => prev.map(t =>
-        t.id === ticketId ? { ...t, status: "open", closeDate: null } : t
-      ));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+const handleReopenTicket = async (ticketId) => {
+  try {
+    await reopenTicket(ticketId);
+
+    setTickets(prev =>
+      prev.map(t =>
+        t.id === ticketId
+          ? {
+              ...t,
+              status: "open",
+              closeDate: null,
+              assignedTo: null
+            }
+          : t
+      )
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   const handleClaimTicket = async (ticketId) => {
     try {
