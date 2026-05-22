@@ -180,15 +180,17 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
   const decoded = jwtDecode(localStorage.getItem("token"));
   const currentUserRole = decoded.role;    
   return (
-    <div
-      style={{
-        position: "relative",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px"
-      }}
-    >
+        <div
+          style={{
+            position: "relative",
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            minHeight: "100vh",  
+            backgroundColor: "#16171d"
+          }}
+        >
       {/* Header */}
       <div
         style={{
