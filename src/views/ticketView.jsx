@@ -73,9 +73,9 @@ export function TicketView() {
             setError(''); 
             const res = await logOut();
             setLO("Logging out!")
-            localStorage.removeItem("token");
             setTimeout(() => {
                 navigate("/login");
+                localStorage.removeItem("token");
             }, 2500)
         } catch (err) {
             setLOR(
