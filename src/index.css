@@ -105,3 +105,12 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+
+* {
+  color: #f3f4f6;
+}
+
+body {
+  background-color: #16171d;
+}
