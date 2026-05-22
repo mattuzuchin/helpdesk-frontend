@@ -14,6 +14,11 @@ import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import { useNavigate } from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
+
+let disableLogin = false
+function disableLoginField() {
+    disableLogin = !disableLogin;
+}
 export default function SignIn() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
@@ -27,11 +32,11 @@ export default function SignIn() {
         const response = await login(email.trimEnd(), password);
         const token = response.data.token;
         localStorage.setItem('token', token);
-        console.log("Login successful, token stored:", token);
         if(!token) {
           return null;
         }
         setSuccess("Login Success! Taking you to your dashboard now.");
+        disableLoginField();
         setTimeout(() => {
           navigate('/dashboard');
         }, 2500);
@@ -60,12 +65,15 @@ export default function SignIn() {
             <Typography variant="h6">
               Login
             </Typography>
+            {!disableLogin && (
             <TextField
               label="Email"
               fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            )}
+            {!disableLogin && (
             <TextField
               label="Password"
               type="password"
@@ -73,6 +81,7 @@ export default function SignIn() {
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
             />
+            )}
             {success && (
             <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
                 {success}
@@ -83,6 +92,8 @@ export default function SignIn() {
                 {error}
             </Alert>
             )}
+
+            {!disableLogin && (
             <Button
               variant="contained"
               fullWidth
@@ -90,6 +101,7 @@ export default function SignIn() {
             >
               Login
             </Button>
+            )}
             <MuiLink
               component={Link}
               to={'/register'}

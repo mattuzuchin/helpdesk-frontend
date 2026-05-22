@@ -14,12 +14,16 @@ import { useState } from 'react';
 import {register} from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
+let disableRegister = false
+function disableRegisterField() {
+    disableRegister = !disableRegister;
+}
 export default function Register() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-   const [success, setSuccess] = useState("");
+  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
   const handleRegistration = async () => {
     try {
@@ -28,6 +32,7 @@ export default function Register() {
         const token = response.data.token;
         localStorage.setItem('token', token);
         setSuccess("User registration successful! Taking you back to login...");
+        disableRegisterField();
         setTimeout(() => {
             navigate('/login');
         }, 4000)
@@ -54,19 +59,24 @@ export default function Register() {
           <Stack spacing={3}>
             <Typography variant="h6">
               Register for an Account
-            </Typography>         
+            </Typography>
+            {!disableRegister && (         
              <TextField
               label="Full Name"
               fullWidth
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            )}
+            {!disableRegister && (
             <TextField
               label="Email"
               fullWidth
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            )}
+            {!disableRegister && (
             <TextField
               label="Password"
               type="password"
@@ -74,6 +84,7 @@ export default function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)} 
             />
+            )}
             {success && (
               <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
                   {success}

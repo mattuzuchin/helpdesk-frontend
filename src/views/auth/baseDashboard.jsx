@@ -24,6 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { jwtDecode } from "jwt-decode";
 import BlockIcon from '@mui/icons-material/Block';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 //  dropdown menu
 export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) {
   return (
@@ -49,6 +50,10 @@ export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) 
         <Paper sx={{ width: 200, position: "absolute", top: "100%", right: 0, zIndex: 1000 }}>
           <MenuList>
             <Divider />
+            <MenuItem onClick={() => alert("Profile page coming soon!")}>
+              <ListItemIcon><AccountCircleIcon fontSize="small" /></ListItemIcon>
+              <ListItemText>Profile</ListItemText>
+            </MenuItem>
             <MenuItem onClick={onLogout}>
               <ListItemIcon><Key fontSize="small" /></ListItemIcon>
               <ListItemText>Logout</ListItemText>
