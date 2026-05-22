@@ -107,11 +107,9 @@ code {
 }
 
 
-/* * {
-  color: #f3f4f6;
-} */
 
 body {
+  margin: 0;
   background-color: #16171d;
   color: #f3f4f6;
 }
