@@ -20,7 +20,7 @@ export function ReassignTickets() {
   const [staffUsers, setStaffUsers] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [pendingAssign, setPendingAssign] = useState({}); 
+  const [pendingAssign, setPendingAssign] = useState({});
   const navigate = useNavigate();
   const decoded = jwtDecode(localStorage.getItem("token"));
 
@@ -32,7 +32,6 @@ export function ReassignTickets() {
           getAllUsers(),
         ]);
         setTickets(ticketsRes.data.tickets);
-        // only staff can be assigned tickets
         setStaffUsers(usersRes.data.users.filter(u => u.role === "staff"));
       } catch (err) {
         console.error(err);
@@ -44,11 +43,9 @@ export function ReassignTickets() {
 
   const handleReassign = async (ticketId) => {
     const newAssigneeId = pendingAssign[ticketId];
-    
     if (!newAssigneeId) return;
     try {
       setError("");
-      console.log("Sending reassign:", ticketId, newAssigneeId);
       await reassignTicket(ticketId, newAssigneeId);
       setTickets(prev =>
         prev.map(t => {
@@ -67,32 +64,60 @@ export function ReassignTickets() {
 
   const statusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case "open":      return "success";
+      case "open":        return "success";
       case "claimed":
       case "in progress": return "warning";
-      case "closed":    return "error";
-      default:          return "default";
+      case "closed":      return "error";
+      default:            return "default";
     }
   };
 
   return (
-    <Box sx={{ padding: "20px", display: "flex", flexDirection: "column", gap: "20px", minHeight: "100vh", backgroundColor: "#16171d" }}>
+    <Box sx={{ p: { xs: "12px", sm: "20px" }, display: "flex", flexDirection: "column", gap: "20px", minHeight: "100vh", backgroundColor: "#16171d" }}>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
-        <Button variant="contained" onClick={() => navigate("/dashboard")} sx={{ backgroundColor: 'transparent' }}>
-          <img src="/uw.png" alt="logo" style={{ width: 120, height: 80, objectFit: "contain" }} />
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1, position: "relative" }}>
+        <Button variant="contained" onClick={() => navigate("/dashboard")} sx={{ backgroundColor: 'transparent', flexShrink: 0 }}>
+          <img src="/uw.png" alt="logo" style={{ width: 80, height: 54, objectFit: "contain" }} />
         </Button>
-        <Typography variant="h5" sx={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+
+        {/* Centered title on md+ */}
+        <Typography
+          variant="h5"
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            pointerEvents: "none",
+          }}
+        >
           Reassign Tickets
         </Typography>
-      </div>
+
+        {/* Mobile title */}
+        <Typography
+          variant="subtitle1"
+          sx={{
+            display: { xs: "block", md: "none" },
+            width: "100%",
+            textAlign: "center",
+            fontWeight: 500,
+          }}
+        >
+          Reassign Tickets
+        </Typography>
+      </Box>
 
       {success && <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">{success}</Alert>}
       {error   && <Alert icon={<ReportIcon fontSize="inherit" />} severity="error">{error}</Alert>}
 
       {/* Ticket grid */}
-      <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 2 }}>
+      <Box sx={{
+        display: "grid",
+        gridTemplateColumns: { xs: "1fr", sm: "repeat(auto-fit, minmax(300px, 1fr))" },
+        gap: 2,
+      }}>
         {tickets.length === 0 && (
           <Typography color="text.secondary">No tickets found.</Typography>
         )}
@@ -101,20 +126,21 @@ export function ReassignTickets() {
             <Stack spacing={1}>
 
               {/* Title + status */}
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <Typography variant="h6" sx={{ wordBreak: "break-word", flex: 1, mr: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 1 }}>
+                <Typography variant="h6" sx={{ wordBreak: "break-word", flex: 1 }}>
                   {ticket.title}
                 </Typography>
                 <Chip
                   label={ticket.status?.toUpperCase()}
                   color={statusColor(ticket.status)}
                   size="small"
+                  sx={{ flexShrink: 0 }}
                 />
               </Box>
 
               <Typography variant="body2" color="text.secondary" sx={{
                 display: "-webkit-box", WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical", overflow: "hidden"
+                WebkitBoxOrient: "vertical", overflow: "hidden",
               }}>
                 {ticket.description}
               </Typography>
@@ -132,7 +158,7 @@ export function ReassignTickets() {
                 )}
               </Box>
 
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                 <Typography variant="body2">Currently Assigned to:</Typography>
                 <Chip
                   label={ticket.assignedTo?.name || "Unassigned"}
@@ -143,7 +169,7 @@ export function ReassignTickets() {
 
               {/* Reassign controls — hide for closed tickets */}
               {ticket.status?.toLowerCase() !== "closed" && (
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                   <Typography variant="body2" sx={{ whiteSpace: "nowrap" }}>Reassign to:</Typography>
                   <Select
                     size="small"
@@ -152,11 +178,11 @@ export function ReassignTickets() {
                     onChange={(e) =>
                       setPendingAssign(prev => ({ ...prev, [ticket.id]: e.target.value }))
                     }
-                    sx={{ flex: 1 }}
+                    sx={{ flex: 1, minWidth: 120 }}
                   >
                     <MenuItem value="" disabled>Select staff…</MenuItem>
                     {staffUsers
-                      .filter(u => u.id !== ticket.assignedToId) 
+                      .filter(u => u.id !== ticket.assignedToId)
                       .map(u => (
                         <MenuItem key={u.id} value={u.id}>{u.name}</MenuItem>
                       ))}

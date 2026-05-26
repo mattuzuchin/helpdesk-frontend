@@ -167,7 +167,7 @@ export function TicketView() {
 
             </div>
             
-            <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
+            <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start", flexDirection: { xs: "column", md: "row" } }}>
                 
                 {/* ticket info should be on left */}
                 <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -204,14 +204,9 @@ export function TicketView() {
                     )}
                 </Box>
                 {/* comments should be in the middle */}
-                <Box sx={{
-                    flex: 1,
-                    minWidth: 0,
-                    position: "sticky",
-                    top: 20,
-                    maxHeight: "80vh",
-                    overflowY: "auto"
-                }}>
+                <Box
+                sx={{ flex: 1, minWidth: 0, position: { md: "sticky" }, top: 20, maxHeight: { md: "80vh" }, overflowY: "auto" }}
+                >
                     {!ticketInfo ? (
                         <Typography>Loading comments...</Typography>
                     ) : (

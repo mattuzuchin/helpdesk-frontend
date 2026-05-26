@@ -25,7 +25,8 @@ import { jwtDecode } from "jwt-decode";
 import BlockIcon from '@mui/icons-material/Block';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-//  dropdown menu
+
+// dropdown menu
 export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) {
   return (
     <div style={{ position: "relative" }}>
@@ -75,7 +76,7 @@ export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) 
   );
 }
 
-// icket card for display
+// ticket card for display
 export function TicketCard({ ticket, navigate, currentUserRole, onDelete, onClose, onClaim, onReopen }) {
   return (
     <Card variant="outlined">
@@ -94,12 +95,12 @@ export function TicketCard({ ticket, navigate, currentUserRole, onDelete, onClos
           <IconButton
             size="small"
             sx={{ position: "absolute", top: 8, right: 40 }}
-            onClick={() =>  onReopen && onReopen(ticket.id)}
+            onClick={() => onReopen && onReopen(ticket.id)}
           >
             <Key fontSize="small" />
           </IconButton>
         )}
-        { ticket.status !== "closed" && (currentUserRole === "admin" || currentUserRole === "staff") && (
+        {ticket.status !== "closed" && (currentUserRole === "admin" || currentUserRole === "staff") && (
           <IconButton
             size="small"
             sx={{ position: "absolute", top: 8, right: 40 }}
@@ -108,17 +109,17 @@ export function TicketCard({ ticket, navigate, currentUserRole, onDelete, onClos
             <BlockIcon fontSize="small" />
           </IconButton>
         )}
-        {(currentUserRole === "admin" || currentUserRole === "staff") && 
-        !ticket.assignedTo && 
+        {(currentUserRole === "admin" || currentUserRole === "staff") &&
+        !ticket.assignedTo &&
         ticket.status !== "claimed" && (
-        <IconButton
+          <IconButton
             size="small"
             sx={{ position: "absolute", top: 8, right: 72 }}
             onClick={() => onClaim && onClaim(ticket.id)}
-        >
+          >
             <AssignmentIndIcon fontSize="small" />
-        </IconButton>
-        )}        
+          </IconButton>
+        )}
         <Button
           disableRipple
           sx={{
@@ -173,54 +174,64 @@ export function TicketCard({ ticket, navigate, currentUserRole, onDelete, onClos
       </Box>
     </Card>
   );
-  
 }
 
 export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, error, onLogout, navigate, title, extraHeaderActions, onDeleteTicket, onCloseTicket, onClaimTicket, onReopenTicket }) {
   const decoded = jwtDecode(localStorage.getItem("token"));
-  const currentUserRole = decoded.role;    
+  const currentUserRole = decoded.role;
   return (
-        <div
-          style={{
-            position: "relative",
-            padding: "20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            minHeight: "100vh",  
-            backgroundColor: "#16171d"
-          }}
-        >
+    <Box
+      sx={{
+        position: "relative",
+        p: { xs: "12px", sm: "20px" },
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        minHeight: "100vh",
+        backgroundColor: "#16171d",
+      }}
+    >
       {/* Header */}
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          position: "relative"
+          flexWrap: "wrap",
+          gap: 1,
         }}
       >
+        {/* Logo */}
         <Button
-        variant="contained"
-        onClick={() => navigate("/dashboard")}
-        sx={{ backgroundColor: 'transparent' }}
+          variant="contained"
+          onClick={() => navigate("/dashboard")}
+          sx={{ backgroundColor: 'transparent', flexShrink: 0 }}
         >
-        <img
+          <img
             src="/uw.png"
             alt="logo"
-            style={{ width: 120, height: 80, objectFit: "contain" }}
-        />
+            style={{ width: 80, height: 54, objectFit: "contain" }}
+          />
         </Button>
 
+        {/* Title — centered on md+, inline on mobile */}
         <Typography
-          variant="h5"
-          sx={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}
+          variant="h6"
+          sx={{
+            display: { xs: "none", md: "block" },
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontSize: { md: "20px" },
+            textAlign: "center",
+            pointerEvents: "none",
+          }}
         >
           {title || `${name}'s Dashboard`}
         </Typography>
 
-        <Stack direction="row" spacing={2} alignItems="center">
-
+        {/* Right side actions */}
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
           <Button
             variant="contained"
             onClick={() => navigate("/dashboard/createTicket")}
@@ -239,19 +250,36 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
             error={error}
           />
         </Stack>
-      </div>
+
+        {/* Title visible only on mobile, below the row */}
+        <Typography
+          variant="subtitle1"
+          sx={{
+            display: { xs: "block", md: "none" },
+            width: "100%",
+            textAlign: "center",
+            fontWeight: 500,
+            mt: 0.5,
+          }}
+        >
+          {title || `${name}'s Dashboard`}
+        </Typography>
+      </Box>
 
       {/* Ticket grid */}
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(auto-fit, minmax(260px, 1fr))",
+          },
           gap: 2,
-          width: "100%"
+          width: "100%",
         }}
       >
         {tickets?.map((ticket) => (
-        <TicketCard
+          <TicketCard
             key={ticket.id}
             ticket={ticket}
             navigate={navigate}
@@ -260,9 +288,9 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
             onClose={onCloseTicket}
             onClaim={onClaimTicket}
             onReopen={onReopenTicket}
-        />
+          />
         ))}
       </Box>
-    </div>
+    </Box>
   );
 }

@@ -1,10 +1,12 @@
 'use client';
 import Button from '@mui/material/Button';
-import { BaseDashboard} from './baseDashboard.jsx';
+import Stack from '@mui/material/Stack';
+import { BaseDashboard } from './baseDashboard.jsx';
 import { useDashboardData } from '../../hooks/useDashboardData.js';
 import { deleteTicket, closeTicket, claimTicket, reopenTicket } from '../../app/api/auth.js';
 import { jwtDecode } from "jwt-decode";
-// user db
+
+// user dashboard
 export function UserDashboard() {
   const { name, tickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
 
@@ -22,10 +24,11 @@ export function UserDashboard() {
   );
 }
 
-// staff db
+// staff dashboard
 export function StaffDashboard() {
   const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
-const handleDeleteTicket = async (ticketId) => {
+
+  const handleDeleteTicket = async (ticketId) => {
     try {
       await deleteTicket(ticketId);
       setTickets(prev => prev.filter(t => t.id !== ticketId));
@@ -33,36 +36,33 @@ const handleDeleteTicket = async (ticketId) => {
       console.log(err);
     }
   };
-const handleReopenTicket = async (ticketId) => {
-  try {
-    await reopenTicket(ticketId);
 
-    setTickets(prev =>
-      prev.map(t =>
-        t.id === ticketId
-          ? {
-              ...t,
-              status: "open",
-              closeDate: null,
-              assignedTo: null
-            }
-          : t
-      )
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const handleReopenTicket = async (ticketId) => {
+    try {
+      await reopenTicket(ticketId);
+      setTickets(prev =>
+        prev.map(t =>
+          t.id === ticketId
+            ? { ...t, status: "open", closeDate: null, assignedTo: null }
+            : t
+        )
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicket(ticketId);
-      setTickets(prev => prev.map(t => 
+      setTickets(prev => prev.map(t =>
         t.id === ticketId ? { ...t, status: "closed" } : t
       ));
     } catch (err) {
       console.log(err);
     }
-  };  
+  };
+
   const handleClaimTicket = async (ticketId) => {
     try {
       await claimTicket(ticketId);
@@ -74,16 +74,17 @@ const handleReopenTicket = async (ticketId) => {
       console.log(err);
     }
   };
+
   const staffActions = (
-    <>
+    <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
       <Button
         variant="contained"
         onClick={() => navigate("/dashboard/allTickets")}
-        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+        sx={{ backgroundColor: 'transparent', fontSize: { xs: 10, sm: 12 } }}
       >
         All Tickets
       </Button>
-    </>
+    </Stack>
   );
 
   return (
@@ -106,9 +107,10 @@ const handleReopenTicket = async (ticketId) => {
   );
 }
 
-// admin db
+// admin dashboard
 export function AdminDashboard() {
   const { name, tickets, setTickets, menuOpen, setMenuOpen, success, error, logOutUser, navigate } = useDashboardData();
+
   const handleDeleteTicket = async (ticketId) => {
     try {
       await deleteTicket(ticketId);
@@ -121,13 +123,14 @@ export function AdminDashboard() {
   const handleCloseTicket = async (ticketId) => {
     try {
       await closeTicket(ticketId);
-      setTickets(prev => prev.map(t => 
+      setTickets(prev => prev.map(t =>
         t.id === ticketId ? { ...t, status: "closed" } : t
       ));
     } catch (err) {
       console.log(err);
     }
-  };  
+  };
+
   const handleClaimTicket = async (ticketId) => {
     try {
       await claimTicket(ticketId);
@@ -139,19 +142,14 @@ export function AdminDashboard() {
       console.log(err);
     }
   };
+
   const handleReopenTicket = async (ticketId) => {
     try {
       await reopenTicket(ticketId);
-
       setTickets(prev =>
         prev.map(t =>
           t.id === ticketId
-            ? {
-                ...t,
-                status: "open",
-                closeDate: null,
-                assignedTo: null
-              }
+            ? { ...t, status: "open", closeDate: null, assignedTo: null }
             : t
         )
       );
@@ -159,30 +157,31 @@ export function AdminDashboard() {
       console.log(err);
     }
   };
+
   const adminActions = (
-    <>
+    <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="flex-end">
       <Button
         variant="contained"
         onClick={() => navigate("/dashboard/allTickets")}
-        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+        sx={{ backgroundColor: 'transparent', fontSize: { xs: 10, sm: 12 } }}
       >
         All Tickets
       </Button>
       <Button
         variant="contained"
         onClick={() => navigate("/dashboard/manageUsers")}
-        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+        sx={{ backgroundColor: 'transparent', fontSize: { xs: 10, sm: 12 } }}
       >
         Manage Users
       </Button>
       <Button
         variant="contained"
         onClick={() => navigate("/dashboard/reassignTickets")}
-        sx={{ backgroundColor: 'transparent', fontSize: 12 }}
+        sx={{ backgroundColor: 'transparent', fontSize: { xs: 10, sm: 12 } }}
       >
-        Reassign Tickets
+        Reassign
       </Button>
-    </>
+    </Stack>
   );
 
   return (
@@ -200,7 +199,7 @@ export function AdminDashboard() {
       onDeleteTicket={handleDeleteTicket}
       onCloseTicket={handleCloseTicket}
       onClaimTicket={handleClaimTicket}
-      onReopenTicket={handleReopenTicket}      
+      onReopenTicket={handleReopenTicket}
     />
   );
 }
