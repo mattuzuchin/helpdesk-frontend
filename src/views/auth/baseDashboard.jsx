@@ -208,7 +208,7 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
           sx={{ backgroundColor: 'transparent', flexShrink: 0 }}
         >
           <img
-            src="/uw.png"
+            src="/hds.png"
             alt="logo"
             style={{ width: 80, height: 54, objectFit: "contain" }}
           />

@@ -66,7 +66,7 @@ const handleCreateTicket = async () => {
         onClick={() => navigate("/dashboard")}
       >
       <img
-        src="/uw.png"
+        src="/hds.png"
         alt="logo"
         style={{
           width: 120,

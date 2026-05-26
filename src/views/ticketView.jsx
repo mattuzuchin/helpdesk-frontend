@@ -121,7 +121,7 @@ export function TicketView() {
                 onClick={() => navigate("/dashboard")}
                 sx={{ backgroundColor: 'transparent' }}
                 >
-                <img src="/uw.png" alt="logo" style={{ width: 120, height: 80, objectFit: "contain" }} />
+                <img src="/hds.png" alt="logo" style={{ width: 120, height: 80, objectFit: "contain" }} />
                 </Button>
                 <Typography
                     variant="h5"

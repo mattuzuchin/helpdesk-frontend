@@ -70,7 +70,7 @@ export function ManageUsers() {
       {/* Header */}
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 1 }}>
         <Button variant="contained" onClick={() => navigate("/dashboard")} sx={{ backgroundColor: 'transparent', flexShrink: 0 }}>
-          <img src="/uw.png" alt="logo" style={{ width: 80, height: 54, objectFit: "contain" }} />
+          <img src="/hds.png" alt="logo" style={{ width: 80, height: 54, objectFit: "contain" }} />
         </Button>
 
         {/* Centered title on md+, hidden on mobile (shown below) */}
