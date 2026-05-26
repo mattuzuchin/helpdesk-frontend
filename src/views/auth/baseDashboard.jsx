@@ -210,7 +210,7 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
           <img
             src="/hds.png"
             alt="logo"
-            style={{ width: 110, height: 54, objectFit: "contain" }}
+            style={{ width: 80, height: 54, objectFit: "contain" }}
           />
         </Button>
 
