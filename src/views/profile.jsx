@@ -45,7 +45,7 @@ export function Profile() {
       }
     };
     fetchProfile();
-  }, []);
+  }, [decoded.role]);
 
   const handleSave = async () => {
     try {
