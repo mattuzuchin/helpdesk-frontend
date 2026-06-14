@@ -11,7 +11,6 @@ import { ProtectedRoute } from "./components/protectedRoute.jsx";
 import { AllTickets } from "./views/allTickets.jsx";
 import { ManageUsers } from "./views/manageUsers.jsx";
 import {ReassignTickets} from "./views/reassignTickets.jsx";
-import {Profile} from "./views/profile.jsx";
 function DashboardRouter() {
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
@@ -47,9 +46,6 @@ export default function App() {
       <Route path="/dashboard/reassignTickets" element={
         <ProtectedRoute><ReassignTickets /></ProtectedRoute>
       } />  
-      <Route path="/dashboard/profile" element={
-        <ProtectedRoute><Profile /></ProtectedRoute>
-      } />
     </Routes>
   );
 }
