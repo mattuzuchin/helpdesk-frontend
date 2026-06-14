@@ -27,7 +27,7 @@ import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 // dropdown menu
-export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) {
+export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error, navigate }) {
   return (
     <div style={{ position: "relative" }}>
       <Button
@@ -51,7 +51,7 @@ export function AvatarMenu({ menuOpen, setMenuOpen, onLogout, success, error }) 
         <Paper sx={{ width: 200, position: "absolute", top: "100%", right: 0, zIndex: 1000 }}>
           <MenuList>
             <Divider />
-            <MenuItem onClick={() => alert("Profile page coming soon!")}>
+            <MenuItem onClick={() => navigate("/dashboard/profile")}>
               <ListItemIcon><AccountCircleIcon fontSize="small" /></ListItemIcon>
               <ListItemText>Profile</ListItemText>
             </MenuItem>
@@ -210,7 +210,7 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
           <img
             src="/hds.png"
             alt="logo"
-            style={{ width: 80, height: 54, objectFit: "contain" }}
+            style={{ maxHeight: 60, width: "auto", display: "block" }}
           />
         </Button>
 
@@ -248,6 +248,7 @@ export function BaseDashboard({ name, tickets, menuOpen, setMenuOpen, success, e
             onLogout={onLogout}
             success={success}
             error={error}
+            navigate={navigate}
           />
         </Stack>
 
