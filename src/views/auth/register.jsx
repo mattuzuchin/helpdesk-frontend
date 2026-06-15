@@ -13,7 +13,8 @@ import { useState } from 'react';
 import { register } from '../../app/api/auth.js';
 import { useNavigate } from 'react-router-dom';
 import ReportIcon from '@mui/icons-material/Report';
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 let disableRegister = false;
 function disableRegisterField() {
   disableRegister = !disableRegister;
@@ -26,7 +27,24 @@ export default function Register() {
   const [name, setName] = useState('');
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
-
+  const passwordChecks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    // eslint-disable-next-line no-useless-escape
+    special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
+  };
+  const checkItem = (passed, label) => (
+    <li style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      {passed ? (
+        <CheckCircleIcon fontSize="small" style={{ color: 'green' }} />
+      ) : (
+        <RadioButtonUncheckedIcon fontSize="small" color="disabled" />
+      )}
+      {label}
+    </li>
+  );
   const handleRegistration = async () => {
     try {
       setError("");
@@ -71,6 +89,13 @@ export default function Register() {
               onChange={(e) => setEmail(e.target.value)}
             />
           )}
+          <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+            {checkItem(passwordChecks.length, "Password must be at least 8 characters")}
+            {checkItem(passwordChecks.uppercase, "Password must contain at least one uppercase letter")}
+            {checkItem(passwordChecks.lowercase, "Password must contain at least one lowercase letter")}
+            {checkItem(passwordChecks.number, "Password must contain at least one number")}
+            {checkItem(passwordChecks.special, "Password must contain at least one special character")}
+          </ul>
           {!disableRegister && (
             <TextField
               label="Password"
